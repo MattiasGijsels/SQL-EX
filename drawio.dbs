@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="TEST" id="Project-c7f" database="SqlServer" >
+	<schema name="dbo" catalogname="TEST" >
+		<table name="Accomodations" prior="Accomo" >
+			<column name="accommodations_ID" type="int" jt="4" mandatory="y" />
+			<column name="hotel_ID" type="int" jt="4" mandatory="y" />
+			<column name="Rentalcar_ID" type="int" jt="4" mandatory="y" />
+			<index name="pk_Accomodations" unique="PRIMARY_KEY" >
+				<column name="accommodations_ID" />
+			</index>
+			<fk name="fk_Accomodations_Hotel" to_schema="TEST.dbo" to_table="Hotel" >
+				<fk_column name="hotel_ID" pk="hotel_ID" />
+			</fk>
+			<fk name="fk_Accomodations_Rentalcar" to_schema="TEST.dbo" to_table="Rentalcar" >
+				<fk_column name="Rentalcar_ID" pk="Rentalcar_ID" />
+			</fk>
+		</table>
+		<table name="Booking" prior="Tbl" >
+			<column name="booking_ID" type="int" jt="4" mandatory="y" />
+			<column name="person_ID" type="int" jt="4" mandatory="y" />
+			<column name="flight_number" type="int" jt="4" mandatory="y" />
+			<column name="destination_ID" type="int" jt="4" mandatory="y" />
+			<index name="pk_Booking" unique="PRIMARY_KEY" >
+				<column name="booking_ID" />
+			</index>
+			<index name="unq_Booking_destination_ID" unique="UNIQUE_KEY" >
+				<column name="destination_ID" />
+			</index>
+			<fk name="fk_Booking_Person" to_schema="TEST.dbo" to_table="Person" >
+				<fk_column name="person_ID" pk="person_ID" />
+			</fk>
+			<fk name="fk_Booking_Flights" to_schema="TEST.dbo" to_table="Flights" >
+				<fk_column name="flight_number" pk="flight_number" />
+			</fk>
+		</table>
+		<table name="Destination" prior="Desti" >
+			<column name="destination_ID" type="int" jt="4" mandatory="y" />
+			<column name="destination_name" prior="destination_ID" type="nvarchar" length="50" jt="12" mandatory="y" />
+			<column name="destination_airport" type="varchar" length="50" jt="12" />
+			<column name="accommodations_ID" type="int" jt="4" mandatory="y" />
+			<index name="pk_Destination" unique="PRIMARY_KEY" >
+				<column name="destination_ID" />
+			</index>
+			<fk name="fk_Destination_Booking" to_schema="TEST.dbo" to_table="Booking" >
+				<fk_column name="destination_ID" pk="destination_ID" />
+			</fk>
+			<fk name="fk_Destination_Accomodations" to_schema="TEST.dbo" to_table="Accomodations" >
+				<fk_column name="accommodations_ID" pk="accommodations_ID" />
+			</fk>
+		</table>
+		<table name="Flights" prior="Trip" >
+			<column name="flight_number" type="int" jt="4" mandatory="y" />
+			<column name="trip_ID" prior="TripID" type="int" jt="4" />
+			<column name="origin_airport" prior="airport_departure" type="varchar" length="50" jt="12" />
+			<column name="airline" type="char" length="6" jt="1" />
+			<column name="scheduled_departure" type="datetime" jt="92" />
+			<column name="person_ID" prior="personID" type="int" jt="4" mandatory="y" />
+			<column name="destination_ID" type="int" jt="4" mandatory="y" />
+			<index name="pk_Flights" unique="PRIMARY_KEY" >
+				<column name="flight_number" />
+			</index>
+			<fk name="fk_Flights_Person" to_schema="TEST.dbo" to_table="Person" >
+				<fk_column name="person_ID" pk="person_ID" />
+			</fk>
+			<fk name="fk_Flights_Destination" to_schema="TEST.dbo" to_table="Destination" >
+				<fk_column name="destination_ID" pk="destination_ID" />
+			</fk>
+		</table>
+		<table name="Hotel" prior="Hotels" >
+			<column name="hotel_ID" type="int" jt="4" mandatory="y" />
+			<column name="hotel_name" type="varchar" length="100" jt="12" />
+			<column name="arrival" prior="hotel_arrival" type="datetime" jt="92" />
+			<column name="checkout" prior="hotel_departure" type="datetime" jt="92" />
+			<column name="person_ID" type="int" jt="4" mandatory="y" />
+			<column name="Night" type="int" jt="4" />
+			<column name="room_number_ID" type="datetime" jt="92" mandatory="y" />
+			<index name="pk_Hotel" unique="PRIMARY_KEY" >
+				<column name="hotel_ID" />
+			</index>
+			<fk name="fk_Hotel_Person" to_schema="TEST.dbo" to_table="Person" >
+				<fk_column name="person_ID" pk="person_ID" />
+			</fk>
+			<fk name="fk_Hotel_Room" to_schema="TEST.dbo" to_table="Room" >
+				<fk_column name="room_number_ID" pk="room_number_ID" />
+			</fk>
+		</table>
+		<table name="Person" prior="Persoon" >
+			<comment><![CDATA[De persoon kan zowel klant zijn als begeleider zijn maar ook contactpersoon.]]></comment>
+			<column name="person_ID" prior="personID" type="int" jt="4" mandatory="y" />
+			<column name="last_name" prior="lastName" type="varchar" length="100" jt="12" />
+			<column name="middle_name" prior="middleName" type="varchar" length="100" jt="12" />
+			<column name="first_name" prior="firstName" type="varchar" length="100" jt="12" />
+			<column name="social_security_number" prior="socialSecurityNumber" type="int" jt="4" />
+			<column name="credit_card_ID" prior="passport_number" type="int" jt="4" />
+			<column name="email" type="varchar" length="60" jt="12" />
+			<column name="Gender" type="nvarchar" length="50" jt="12" />
+			<index name="pk_Persoon" unique="PRIMARY_KEY" >
+				<column name="person_ID" />
+			</index>
+		</table>
+		<table name="Rentalcar" prior="Car" >
+			<column name="Rentalcar_ID" type="int" jt="4" mandatory="y" />
+			<column name="rental_start" type="date" jt="91" />
+			<column name="type" prior="price" type="nvarchar" length="70" jt="12" >
+				<type_options><![CDATA[Basic]]></type_options>
+			</column>
+			<index name="pk_Rentalcar" unique="PRIMARY_KEY" >
+				<column name="Rentalcar_ID" />
+			</index>
+		</table>
+		<table name="Room" prior="Tbl" >
+			<column name="room_number_ID" prior="R" type="datetime" jt="92" mandatory="y" />
+			<column name="price_per_night" prior="room_type" type="int" jt="4" />
+			<column name="room_type" type="nvarchar" length="50" jt="12" />
+			<column name="max_guest" type="int" jt="4" />
+			<index name="pk_Room" unique="PRIMARY_KEY" >
+				<column name="room_number_ID" />
+			</index>
+		</table>
+		<table name="Trip" prior="Tri" >
+			<column name="trip_ID" type="int" jt="4" />
+			<column name="destination_ID" type="int" jt="4" mandatory="y" />
+			<fk name="fk_Trip_Destination" to_schema="TEST.dbo" to_table="Destination" >
+				<fk_column name="destination_ID" pk="destination_ID" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-2635" confirmed="y" show_relation="columns" >
+		<entity schema="TEST.dbo" name="Accomodations" color="C1D8EE" x="288" y="480" />
+		<entity schema="TEST.dbo" name="Booking" color="C1D8EE" x="544" y="256" />
+		<entity schema="TEST.dbo" name="Destination" color="C1D8EE" x="80" y="256" />
+		<entity schema="TEST.dbo" name="Flights" color="C1D8EE" x="528" y="432" />
+		<entity schema="TEST.dbo" name="Hotel" color="C1D8EE" x="544" y="640" />
+		<entity schema="TEST.dbo" name="Person" color="C1D8EE" x="992" y="240" />
+		<entity schema="TEST.dbo" name="Rentalcar" color="C1D8EE" x="48" y="672" />
+		<entity schema="TEST.dbo" name="Room" color="C1D8EE" x="352" y="688" />
+		<entity schema="TEST.dbo" name="Trip" color="C1D8EE" x="48" y="496" />
+		<callout x="64" y="48" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Right-click the layout to create new tables. 
+- Double-click table headers to edit. 
+- For a better understanding of the schema, create multiple layouts.
+- Save the design to the model file, and deploy from 'Schema / Create into the database'.]]></comment>
+		</callout>
+	</layout>
+</project>
